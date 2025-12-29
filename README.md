@@ -29,22 +29,40 @@ To start the local development server:
 npm run dev
 ```
 
-### Build for Deployment
+## VPS Deployment Guide
 
-To generate a static production build:
+Since this is a static site, environment variables must be available at **build time**.
 
-```bash
-npm run build
-```
+1.  **Clone the repository**:
+    ```bash
+    git clone [your-repo-url]
+    cd zenith-protocol
+    ```
 
-The output files will be in the `dist` directory. You can serve this directory using Nginx, Apache, or any static file host on your VPS.
+2.  **Configure API Key**:
+    Create a `.env` file in the project root:
+    ```bash
+    nano .env
+    ```
+    Add your Google Gemini API Key (Must use the prefix `VITE_`):
+    ```
+    VITE_API_KEY=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ```
+    *(Save and exit: Ctrl+O, Enter, Ctrl+X)*
 
-## API Key Configuration
+3.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
 
-This project uses the Google Gemini API.
-For local development and production, ensure you have a valid API Key.
+4.  **Build the Project**:
+    This step reads your `.env` file and bundles the key into the HTML/JS.
+    ```bash
+    npm run build
+    ```
 
-**Note**: The application is designed to verify the API key availability securely. For the frontend-only version, users may be prompted or you can configure a proxy if needed, though the current implementation is client-side focused.
+5.  **Serve**:
+    Point your web server (Nginx/Apache) to the `dist` directory.
 
 ## Analytics
 

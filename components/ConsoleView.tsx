@@ -145,7 +145,7 @@ const ConsoleView: React.FC = () => {
                   {/* ANALYSIS TEXT */}
                   <div className="border-t border-zenith-border pt-4 relative z-10">
                      <p className="font-mono text-xs md:text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
-                        <span className="text-signal-orange mr-2">>></span>
+                        <span className="text-signal-orange mr-2">&gt;&gt;</span>
                         {result.analysis}
                      </p>
                   </div>

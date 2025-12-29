@@ -20,7 +20,7 @@ const AnalysisSection: React.FC<Props> = ({ data }) => {
           SYSTEM DIAGNOSTICS <span className="text-signal-orange">//</span> REPORT
         </h2>
         <p className="text-lg font-mono text-gray-400 leading-relaxed max-w-3xl border-t border-zenith-border pt-4 mt-4">
-          <span className="text-signal-orange mr-2">>></span>
+          <span className="text-signal-orange mr-2">&gt;&gt;</span>
           {data.intro}
         </p>
       </div>

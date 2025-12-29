@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE ZENITH PROTOCOL // LIFE PRINCIPLES</title>
+    
+    <!-- Analytics -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="8b7793a1-6800-4c47-a5a7-b46233f5c989"></script>
+    
+    <!-- Styles & Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+      // Robust Polyfill for process.env
+      window.process = window.process || { env: {} };
+      if (!window.process.env) window.process.env = {};
+    </script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['IBM Plex Mono', 'monospace'],
+            },
+            colors: {
+              zenith: {
+                bg: '#030303',
+                surface: '#0F0F11',
+                border: '#27272A',
+                borderLight: '#3F3F46',
+              },
+              signal: {
+                orange: '#FF4D00',
+                green: '#00E676',
+                amber: '#FFB000',
+                red: '#FF003C',
+              }
+            },
+            backgroundImage: {
+              'scanlines': 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
+            },
+            animation: {
+              'blink': 'blink 1s step-end infinite',
+            },
+            keyframes: {
+              blink: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #030303;
+        color: #e4e4e7;
+      }
+      .scanlines {
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 4px; 
+      }
+      ::-webkit-scrollbar-track {
+        background: #030303; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #27272A; 
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FF4D00; 
+      }
+      
+      /* Hide scrollbar utility */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+    </style>
+    <!-- Import Map (Optional for dev, Vite handles this in build) -->
+    <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-zenith-bg text-gray-200 antialiased selection:bg-signal-orange selection:text-black">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

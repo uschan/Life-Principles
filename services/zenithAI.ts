@@ -1,3 +1,4 @@
+import { GoogleGenAI } from "@google/genai";
 import { principles } from '../data';
 
 // --- Types ---
@@ -81,9 +82,6 @@ const getApiKey = (): string | undefined => {
 
 // --- 1. SDK Implementation ---
 async function runWithSDK(apiKey: string, userQuery: string): Promise<ZenithAnalysis> {
-  // Try to load the module. If this fails, it throws, and we catch it in the main function.
-  const { GoogleGenAI, Type } = await import("https://esm.sh/@google/genai@0.1.2");
-  
   const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',

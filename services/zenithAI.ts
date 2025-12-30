@@ -1,10 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 import { principles } from '../data';
 
-// Declare process for fallback environment check to satisfy TypeScript
+// Declare process to satisfy TypeScript for the replaced variable
 declare var process: {
   env: {
-    [key: string]: string | undefined;
     API_KEY?: string;
   }
 };
@@ -44,7 +43,7 @@ Rules:
 `;
 
 const RESPONSE_SCHEMA_JSON = {
-  type: "OBJECT",
+  type: "OBJECT" as const,
   properties: {
     verdict: { type: "STRING", enum: ['APPROVED', 'CAUTION', 'REJECTED'] },
     score: { type: "INTEGER" },
@@ -70,22 +69,9 @@ const MOCK_RESPONSE: ZenithAnalysis = {
   riskFactors: ["Offline Heuristics", "Uncapped Downside Risk"]
 };
 
-// --- Helper for Safe Env Access ---
-const getApiKey = (): string | undefined => {
-  // As per guidelines, the API key must be obtained exclusively from process.env.API_KEY.
-  try {
-    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-      return process.env.API_KEY;
-    }
-  } catch (e) {
-    console.warn("Environment access failed", e);
-  }
-  return undefined;
-};
-
 // --- 1. SDK Implementation ---
-async function runWithSDK(apiKey: string, userQuery: string): Promise<ZenithAnalysis> {
-  const ai = new GoogleGenAI({ apiKey });
+async function runWithSDK(userQuery: string): Promise<ZenithAnalysis> {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
     contents: userQuery,
@@ -142,10 +128,11 @@ async function runWithRestAPI(apiKey: string, userQuery: string): Promise<Zenith
 
 // --- Main Service Function ---
 export async function runSimulation(userQuery: string): Promise<ZenithAnalysis> {
-  const apiKey = getApiKey();
+  // Vite replaces process.env.API_KEY with the actual string value during build
+  const apiKey = process.env.API_KEY;
 
   // 1. Check API Key
-  if (!apiKey || apiKey === 'undefined') {
+  if (!apiKey) {
     console.warn("No API Key found. Running Mock.");
     await new Promise(resolve => setTimeout(resolve, 1500));
     return MOCK_RESPONSE;
@@ -155,7 +142,7 @@ export async function runSimulation(userQuery: string): Promise<ZenithAnalysis> 
   try {
     // Attempt A: SDK
     // We try this first to adhere to best practices
-    return await runWithSDK(apiKey, userQuery);
+    return await runWithSDK(userQuery);
   } catch (sdkError) {
     console.warn("SDK Load Failed, attempting REST Fallback...", sdkError);
     

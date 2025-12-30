@@ -1,6 +1,14 @@
 import { GoogleGenAI } from "@google/genai";
 import { principles } from '../data';
 
+// Declare process for fallback environment check to satisfy TypeScript
+declare var process: {
+  env: {
+    [key: string]: string | undefined;
+    API_KEY?: string;
+  }
+};
+
 // --- Types ---
 export interface ZenithAnalysis {
   verdict: 'APPROVED' | 'CAUTION' | 'REJECTED';
@@ -64,12 +72,7 @@ const MOCK_RESPONSE: ZenithAnalysis = {
 
 // --- Helper for Safe Env Access ---
 const getApiKey = (): string | undefined => {
-  // 1. Try Vite Standard Environment Variable (Best for Production)
-  if (import.meta.env && import.meta.env.VITE_API_KEY) {
-    return import.meta.env.VITE_API_KEY;
-  }
-
-  // 2. Fallback to process.env (Legacy/Node context)
+  // As per guidelines, the API key must be obtained exclusively from process.env.API_KEY.
   try {
     if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
       return process.env.API_KEY;

@@ -71,7 +71,9 @@ const MOCK_RESPONSE: ZenithAnalysis = {
 
 // --- 1. SDK Implementation ---
 async function runWithSDK(userQuery: string): Promise<ZenithAnalysis> {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = process.env.API_KEY;
+  const ai = new GoogleGenAI({ apiKey: apiKey }); // Using direct variable
+  
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
     contents: userQuery,
@@ -128,12 +130,17 @@ async function runWithRestAPI(apiKey: string, userQuery: string): Promise<Zenith
 
 // --- Main Service Function ---
 export async function runSimulation(userQuery: string): Promise<ZenithAnalysis> {
-  // Vite replaces process.env.API_KEY with the actual string value during build
+  // Vite replaces process.env.API_KEY with the actual string value during build.
+  // We access it directly to ensure compatibility.
   const apiKey = process.env.API_KEY;
 
+  // Debugging log for the browser console (Will show up in Chrome DevTools)
+  console.log("ZENITH KERNEL: Initializing...");
+  console.log(`ZENITH KERNEL: API Key detected? ${apiKey && apiKey.length > 0 ? "YES" : "NO"}`);
+
   // 1. Check API Key
-  if (!apiKey) {
-    console.warn("No API Key found. Running Mock.");
+  if (!apiKey || apiKey === "undefined" || apiKey === "") {
+    console.warn("ZENITH KERNEL: No API Key found. Aborting to Mock Mode.");
     await new Promise(resolve => setTimeout(resolve, 1500));
     return MOCK_RESPONSE;
   }

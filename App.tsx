@@ -4,7 +4,8 @@ import { PrincipleItem } from './types';
 import ZenithCard from './components/ZenithCard';
 import AnalysisSection from './components/AnalysisSection';
 import ConsoleView from './components/ConsoleView';
-import PrincipleModal from './components/PrincipleModal'; // Import Modal
+import PrincipleModal from './components/PrincipleModal';
+import ShareModal from './components/ShareModal'; // New Import
 import { Category } from './types';
 import { 
   XIcon, 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<'DATABASE' | 'DIAGNOSTICS' | 'CONSOLE'>('DATABASE');
   const [filter, setFilter] = useState<Category | 'ALL'>('ALL');
   const [selectedPrinciple, setSelectedPrinciple] = useState<PrincipleItem | null>(null);
+  const [sharePrinciple, setSharePrinciple] = useState<PrincipleItem | null>(null); // State for Share Modal
 
   const categories: Category[] = ['CORE', 'STRATEGY', 'MINDSET', 'RELATION', 'SYSTEM'];
 
@@ -29,11 +31,15 @@ const App: React.FC = () => {
   }, [filter]);
 
   const handleCardClick = (principle: PrincipleItem) => {
-    // Only open modal if there is deep dive content or if we want to show generic content nicely
-    // For now, let's open it for any card, but the modal handles empty deepDive internally (returns null)
-    // Actually, strictly better to only open if deepDive exists to avoid empty modals.
     if (principle.deepDive) {
       setSelectedPrinciple(principle);
+    }
+  };
+
+  const handleShare = () => {
+    if (selectedPrinciple) {
+      setSharePrinciple(selectedPrinciple); // Set principle for sharing
+      setSelectedPrinciple(null); // Close the detail modal
     }
   };
 
@@ -43,11 +49,20 @@ const App: React.FC = () => {
       {/* BACKGROUND: Scanlines */}
       <div className="fixed inset-0 z-0 bg-scanlines opacity-20 pointer-events-none"></div>
 
-      {/* MODAL */}
+      {/* MODAL: DETAIL */}
       {selectedPrinciple && (
         <PrincipleModal 
           principle={selectedPrinciple} 
-          onClose={() => setSelectedPrinciple(null)} 
+          onClose={() => setSelectedPrinciple(null)}
+          onShare={handleShare}
+        />
+      )}
+
+      {/* MODAL: SHARE */}
+      {sharePrinciple && (
+        <ShareModal 
+          principle={sharePrinciple}
+          onClose={() => setSharePrinciple(null)}
         />
       )}
       

@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { principles } from '../data';
+import { PrincipleItem } from '../types';
 
 // Declare process to satisfy TypeScript for the replaced variable
 declare var process: {
@@ -129,6 +130,62 @@ async function runWithRestAPI(apiKey: string, userQuery: string): Promise<Zenith
     return JSON.parse(text) as ZenithAnalysis;
   }
   throw new Error("REST API returned invalid structure");
+}
+
+// --- Image Generation ---
+export async function generatePrincipleImage(principle: PrincipleItem): Promise<string> {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) throw new Error("No API Key");
+
+  const ai = new GoogleGenAI({ apiKey: apiKey });
+
+  // Modified Prompt: Softer, more philosophical, less aggressive/industrial
+  const prompt = `
+    Create a highly aesthetic, abstract, minimalist digital art piece representing the concept: "${principle.title}".
+    
+    Style: Ethereal, Cinematic, Geometric Abstraction, Philosophical.
+    Mood: Contemplative, Serene, Profound, Vast.
+    
+    Color Palette: 
+    - Deep Obsidian/Void Black background.
+    - Soft, glowing Tungsten (Warm Orange/Amber) highlights.
+    - Subtle Slate Grey structures.
+    
+    Visual Elements: 
+    - Smooth gradients, fog, light rays, simple geometric forms (spheres, monoliths, lines).
+    - Avoid messy details, avoid text, avoid wires/grunge.
+    - Focus on light and shadow interplay.
+    
+    Aspect Ratio: 1:1.
+    Quality: 8k resolution, architectural photography style.
+    Context: "${principle.content}"
+  `;
+
+  // Use gemini-2.5-flash-image for generation as per guidelines for general tasks
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash-image',
+    contents: {
+      parts: [
+        { text: prompt }
+      ]
+    },
+    config: {
+       imageConfig: {
+         aspectRatio: "1:1",
+       }
+    }
+  });
+
+  // Iterate to find the image part
+  if (response.candidates?.[0]?.content?.parts) {
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
+    }
+  }
+
+  throw new Error("No image generated");
 }
 
 // --- Main Service Function ---

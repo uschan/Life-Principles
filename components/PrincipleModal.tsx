@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { PrincipleItem } from '../types';
-import { XIcon } from './Icons';
+import { XIcon, ShareIcon } from './Icons';
 
 interface Props {
   principle: PrincipleItem;
   onClose: () => void;
+  onShare: () => void; // New prop
 }
 
-const PrincipleModal: React.FC<Props> = ({ principle, onClose }) => {
+const PrincipleModal: React.FC<Props> = ({ principle, onClose, onShare }) => {
   const { deepDive } = principle;
 
   // Prevent background scrolling when modal is open
@@ -46,12 +47,23 @@ const PrincipleModal: React.FC<Props> = ({ principle, onClose }) => {
               {principle.title}
             </h2>
           </div>
-          <button 
-            onClick={onClose}
-            className="group p-2 hover:bg-white/10 rounded-full transition-colors"
-          >
-            <XIcon className="w-6 h-6 text-gray-500 group-hover:text-white transition-colors" />
-          </button>
+          
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={onShare}
+              className="group p-2 hover:bg-white/10 rounded-full transition-colors flex items-center justify-center"
+              title="Generate Share Card"
+            >
+              <ShareIcon className="w-5 h-5 text-gray-500 group-hover:text-signal-orange transition-colors" />
+            </button>
+            <div className="w-px h-4 bg-zenith-border mx-1"></div>
+            <button 
+              onClick={onClose}
+              className="group p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <XIcon className="w-6 h-6 text-gray-500 group-hover:text-white transition-colors" />
+            </button>
+          </div>
         </div>
 
         {/* SCROLLABLE BODY */}

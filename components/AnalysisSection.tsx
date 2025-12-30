@@ -7,7 +7,7 @@ interface Props {
 
 const AnalysisSection: React.FC<Props> = ({ data }) => {
   return (
-    <div className="max-w-[1400px] mx-auto space-y-24 pb-24">
+    <div className="max-w-[1400px] mx-auto space-y-24 pb-12">
       
       {/* SECTION 0: HEADER */}
       <div className="border-l-2 border-signal-orange pl-8 py-4 relative overflow-hidden">
@@ -19,7 +19,7 @@ const AnalysisSection: React.FC<Props> = ({ data }) => {
         <h2 className="text-4xl font-sans font-bold text-white tracking-tighter mb-4">
           SYSTEM DIAGNOSTICS <span className="text-signal-orange">//</span> REPORT
         </h2>
-        <p className="text-lg font-mono text-gray-400 leading-relaxed max-w-3xl border-t border-zenith-border pt-4 mt-4">
+        <p className="text-sm font-mono text-gray-400 leading-relaxed max-w-3xl border-t border-zenith-border pt-4 mt-4">
           <span className="text-signal-orange mr-2">&gt;&gt;</span>
           {data.intro}
         </p>
@@ -68,7 +68,7 @@ const AnalysisSection: React.FC<Props> = ({ data }) => {
                
                <div className="relative z-10">
                  <div className="flex justify-between items-start mb-6">
-                    <h3 className="text-2xl font-bold text-white tracking-tight">
+                    <h3 className="text-xl font-bold text-white tracking-tight">
                        {data.keyInsight.title}
                     </h3>
                     <div className="px-3 py-1 border border-signal-orange text-signal-orange text-[10px] font-mono tracking-widest">

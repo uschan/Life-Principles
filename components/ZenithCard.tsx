@@ -3,9 +3,10 @@ import { PrincipleItem } from '../types';
 
 interface Props {
   principle: PrincipleItem;
+  onClick?: (principle: PrincipleItem) => void;
 }
 
-const ZenithCard: React.FC<Props> = ({ principle }) => {
+const ZenithCard: React.FC<Props> = ({ principle, onClick }) => {
   // Category Color Mapping
   const getCategoryColor = (cat: string) => {
     switch (cat) {
@@ -19,7 +20,10 @@ const ZenithCard: React.FC<Props> = ({ principle }) => {
   };
 
   return (
-    <div className="group relative bg-zenith-surface border border-zenith-border h-full flex flex-col transition-all duration-75 hover:bg-gray-200 hover:border-white overflow-hidden">
+    <div 
+      onClick={() => onClick && onClick(principle)}
+      className="group relative bg-zenith-surface border border-zenith-border h-full flex flex-col transition-all duration-75 hover:bg-gray-200 hover:border-white overflow-hidden cursor-pointer"
+    >
       
       {/* DECORATION: Corner Cut (Visualized via clip-path or simple absolute divs) */}
       <div className="absolute -top-[1px] -right-[1px] w-4 h-4 bg-zenith-bg border-b border-l border-zenith-border z-10 group-hover:bg-gray-200 group-hover:border-black"></div>
@@ -40,23 +44,31 @@ const ZenithCard: React.FC<Props> = ({ principle }) => {
       {/* BODY: Content */}
       <div className="p-6 flex-grow flex flex-col relative">
         {/* Title */}
-        <h3 className="text-xl font-bold mb-3 font-sans tracking-tight text-white group-hover:text-black group-hover:invert-0 transition-colors duration-75">
+        <h3 className="text-xl font-bold mb-3 font-sans tracking-tight text-white group-hover:text-black group-hover:invert-0 transition-colors duration-75 flex items-center gap-2">
           {principle.title}
+          {principle.deepDive && (
+             <span className="inline-block w-1.5 h-1.5 rounded-full bg-signal-orange animate-pulse" title="Deep Dive Available"></span>
+          )}
         </h3>
 
         {/* Main Content */}
-        <p className="text-sm text-gray-400 leading-relaxed mb-6 font-sans group-hover:text-black/80">
+        <p className="text-sm text-gray-400 leading-relaxed mb-6 font-sans group-hover:text-black/80 line-clamp-3">
           {principle.content}
         </p>
 
         {/* Points (Decorated List) */}
         <ul className="mt-auto space-y-2 border-t border-dashed border-zenith-border pt-4 group-hover:border-black/20">
-          {principle.points.map((point, idx) => (
+          {principle.points.slice(0, 2).map((point, idx) => (
             <li key={idx} className="flex items-start gap-3 text-xs text-gray-500 font-mono group-hover:text-black/70">
                <span className="text-signal-orange mt-0.5 group-hover:text-black">_</span>
-               <span className="uppercase tracking-wide">{point}</span>
+               <span className="uppercase tracking-wide line-clamp-1">{point}</span>
             </li>
           ))}
+          {principle.points.length > 2 && (
+             <li className="text-[10px] text-gray-400 group-hover:text-black/50 italic pl-5">
+               + {principle.points.length - 2} more...
+             </li>
+          )}
         </ul>
       </div>
 
@@ -69,6 +81,13 @@ const ZenithCard: React.FC<Props> = ({ principle }) => {
           <path d="M6 0V12M0 6H12" stroke="currentColor" strokeWidth="0.5"/>
         </svg>
       </div>
+
+      {/* Click Hint Overlay */}
+      {principle.deepDive && (
+        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
+            <span className="bg-black text-white px-3 py-1 font-mono text-[10px] tracking-widest uppercase border border-white/20">Read Protocol</span>
+        </div>
+      )}
     </div>
   );
 };

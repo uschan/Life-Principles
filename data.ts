@@ -1,6 +1,9 @@
-import { PrincipleItem, AnalysisData } from './types';
 
-export const principles: PrincipleItem[] = [
+import { PrincipleItem, AnalysisData } from './types';
+import { principleDetails } from './contentData';
+
+// Define the core data structure without hardcoded deepDive content
+const rawPrinciples: Omit<PrincipleItem, 'deepDive'>[] = [
   { 
     id: 1, 
     category: 'CORE',
@@ -247,6 +250,12 @@ export const principles: PrincipleItem[] = [
     points: ["建立在结果上会恐惧失败。", "建立在原则上可以重来，可以清零。"]
   }
 ];
+
+// Dynamically merge deepDive content based on ID
+export const principles: PrincipleItem[] = rawPrinciples.map(p => ({
+  ...p,
+  deepDive: principleDetails[p.id] || undefined
+}));
 
 export const analysisData: AnalysisData = {
   intro: "SYSTEM DIAGNOSTIC: 本次分析针对 35 条核心原则进行结构化解构。该协议不仅是一组建议，更是一套完整的「反脆弱操作系统」。它强调在极端不确定性中建立秩序，通过主动的风险管理和注意力分配，实现个体生存质量的最大化。",

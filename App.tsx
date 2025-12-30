@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { principles, analysisData } from './data';
+import { PrincipleItem } from './types';
 import ZenithCard from './components/ZenithCard';
 import AnalysisSection from './components/AnalysisSection';
 import ConsoleView from './components/ConsoleView';
+import PrincipleModal from './components/PrincipleModal'; // Import Modal
 import { Category } from './types';
 import { 
   XIcon, 
@@ -17,6 +19,7 @@ import {
 const App: React.FC = () => {
   const [view, setView] = useState<'DATABASE' | 'DIAGNOSTICS' | 'CONSOLE'>('DATABASE');
   const [filter, setFilter] = useState<Category | 'ALL'>('ALL');
+  const [selectedPrinciple, setSelectedPrinciple] = useState<PrincipleItem | null>(null);
 
   const categories: Category[] = ['CORE', 'STRATEGY', 'MINDSET', 'RELATION', 'SYSTEM'];
 
@@ -25,31 +28,64 @@ const App: React.FC = () => {
     return principles.filter(p => p.category === filter);
   }, [filter]);
 
+  const handleCardClick = (principle: PrincipleItem) => {
+    // Only open modal if there is deep dive content or if we want to show generic content nicely
+    // For now, let's open it for any card, but the modal handles empty deepDive internally (returns null)
+    // Actually, strictly better to only open if deepDive exists to avoid empty modals.
+    if (principle.deepDive) {
+      setSelectedPrinciple(principle);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zenith-bg text-gray-200 font-sans selection:bg-signal-orange selection:text-black relative overflow-x-hidden">
       
       {/* BACKGROUND: Scanlines */}
       <div className="fixed inset-0 z-0 bg-scanlines opacity-20 pointer-events-none"></div>
+
+      {/* MODAL */}
+      {selectedPrinciple && (
+        <PrincipleModal 
+          principle={selectedPrinciple} 
+          onClose={() => setSelectedPrinciple(null)} 
+        />
+      )}
       
       {/* HEADER: Industrial HUD Style */}
       <header className="sticky top-0 z-50 bg-zenith-bg/95 backdrop-blur-md border-b border-zenith-border">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between">
           
-          {/* LOGO AREA */}
-          <div className="flex items-center gap-3 md:gap-4 cursor-pointer" onClick={() => setView('DATABASE')}>
-             <div className="w-8 h-8 md:w-8 md:h-8 bg-signal-orange flex items-center justify-center shrink-0">
-                <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="3" d="M12 4v16m8-8H4" />
-                </svg>
-             </div>
-             <div className="flex flex-col justify-center">
-               <h1 className="text-sm md:text-lg font-bold tracking-tight leading-none text-white whitespace-nowrap">
-                 THE ZENITH PROTOCOL
-               </h1>
-               <p className="hidden md:block text-[10px] font-mono text-gray-500 tracking-[0.2em] uppercase mt-1">
-                 Life Principles // v2.0
-               </p>
-             </div>
+          <div className="flex items-center gap-8">
+            {/* LOGO AREA */}
+            <div className="flex items-center gap-3 md:gap-4 cursor-pointer" onClick={() => setView('DATABASE')}>
+               <div className="w-8 h-8 md:w-8 md:h-8 bg-signal-orange flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="3" d="M12 4v16m8-8H4" />
+                  </svg>
+               </div>
+               <div className="flex flex-col justify-center">
+                 <h1 className="text-sm md:text-lg font-bold tracking-tight leading-none text-white whitespace-nowrap">
+                   THE ZENITH PROTOCOL
+                 </h1>
+                 <p className="hidden md:block text-[10px] font-mono text-gray-500 tracking-[0.2em] uppercase mt-1">
+                   Life Principles // v2.0
+                 </p>
+               </div>
+            </div>
+
+            {/* STATUS INDICATOR: "ENTROPY: RESISTING" */}
+            <div className="hidden lg:flex items-center gap-3 border-l border-zenith-border pl-6 h-8 group cursor-help" title="Life is the struggle against disorder. Keep building order.">
+               <div className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-signal-green opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-signal-green group-hover:bg-white transition-colors"></span>
+               </div>
+               <div className="flex flex-col">
+                  <span className="font-mono text-[9px] text-gray-600 tracking-widest leading-none uppercase mb-1">SYSTEM STATUS</span>
+                  <span className="font-mono text-[10px] text-signal-green tracking-[0.15em] leading-none uppercase group-hover:text-white transition-colors">
+                    ENTROPY: RESISTING
+                  </span>
+               </div>
+            </div>
           </div>
 
           {/* RIGHT NAVIGATION */}
@@ -132,7 +168,11 @@ const App: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-zenith-border border border-zenith-border">
               {filteredPrinciples.map((p) => (
-                 <ZenithCard key={p.id} principle={p} />
+                 <ZenithCard 
+                    key={p.id} 
+                    principle={p} 
+                    onClick={handleCardClick}
+                 />
               ))}
             </div>
 
@@ -159,8 +199,8 @@ const App: React.FC = () => {
         )}
         </div>
 
-        {/* FOOTER: Social Capsule */}
-        <footer className="mt-24 pb-8 flex justify-center">
+        {/* FOOTER: Social Capsule & Copyright */}
+        <footer className="mt-24 pb-12 flex flex-col items-center gap-8">
             <div className="bg-zenith-surface/80 border border-zenith-border rounded-full px-6 py-3 flex items-center gap-5 shadow-2xl backdrop-blur-sm hover:border-gray-600 transition-colors">
                <a href="https://x.com/uschan" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors" title="X (Twitter)">
                   <XIcon className="w-4 h-4" />
@@ -186,6 +226,10 @@ const App: React.FC = () => {
                   <span className="text-[10px] font-mono tracking-widest hidden sm:inline group-hover:text-white">WILDSALT</span>
                </a>
             </div>
+
+            <p className="text-[10px] font-mono text-gray-600 tracking-widest uppercase">
+              © {new Date().getFullYear()} The Zenith Protocol. All rights reserved.
+            </p>
         </footer>
 
       </main>

@@ -1,4 +1,19 @@
+
 export type Category = 'CORE' | 'STRATEGY' | 'MINDSET' | 'RELATION' | 'SYSTEM';
+
+export interface DeepDiveSection {
+  title?: string;
+  content: string;
+  list?: string[];
+  insight?: string; // For the punchlines like "人不是被事情改变的..."
+  isBlockquote?: boolean; // For specific quote blocks
+}
+
+export interface DeepDiveContent {
+  intro?: string;
+  sections: DeepDiveSection[];
+  footer?: string;
+}
 
 export interface PrincipleItem {
   id: number;
@@ -6,6 +21,7 @@ export interface PrincipleItem {
   title: string;
   content: string;
   points: string[];
+  deepDive?: DeepDiveContent; // New optional field for modal content
 }
 
 export interface AnalysisSection {

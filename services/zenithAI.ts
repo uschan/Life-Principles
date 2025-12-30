@@ -24,6 +24,7 @@ Your goal is to audit the user's decision against 35 specific Life Principles.
 
 Role: Ruthless, rational, architect-style advisor.
 Tone: Cold, precise, technical, "Cyberpunk/Industrial".
+Language: SIMPLIFIED CHINESE (简体中文).
 
 Task:
 1. Analyze the user's input (a decision or dilemma).
@@ -36,6 +37,8 @@ Principles Context:
 ${principles.map(p => `ID ${p.id} (${p.category}): ${p.title} - ${p.content}`).join('\n')}
 
 Rules:
+- CRITICAL: The 'verdict' field MUST be strictly one of: 'APPROVED', 'CAUTION', 'REJECTED' (Keep English).
+- CRITICAL: The 'analysis' and 'riskFactors' content MUST be in SIMPLIFIED CHINESE (简体中文).
 - If a decision is "Hesitant", apply Principle #17 (Absolute Yes).
 - If a decision has high downside, apply Principle #28 (Lower Bound).
 - If a decision relies on external validation, apply Principle #9 & #35.
@@ -64,9 +67,9 @@ const RESPONSE_SCHEMA_JSON = {
 const MOCK_RESPONSE: ZenithAnalysis = {
   verdict: 'CAUTION',
   score: 65,
-  analysis: "KERNEL DIAGNOSTIC COMPLETE.\n\n[OFFLINE MODE ACTIVE]\n\nConnection to main neural frame could not be established. Running local heuristic analysis.\n\nDetected potential fragility in decision structure. The proposed path fits linear progression models which carry hidden risk (See #27). \n\nRecommendation: Proceed only if you can design a safe failure floor (#28).",
+  analysis: "核心诊断完毕。\n\n[离线模式已激活]\n\n无法连接至主神经框架，正在运行本地启发式分析。\n\n检测到决策结构中存在潜在的脆弱性。拟议的路径符合线性增长模型，这通常携带隐藏的风险 (参见原则 #27)。\n\n建议：仅在你设计好安全的失败下限 (#28) 后方可推进。",
   relevantPrincipleIds: [17, 27, 28, 1],
-  riskFactors: ["Offline Heuristics", "Uncapped Downside Risk"]
+  riskFactors: ["离线启发式分析", "下行风险未封顶"]
 };
 
 // --- 1. SDK Implementation ---

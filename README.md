@@ -1,12 +1,19 @@
 # Zenith Protocol // Life Principles
 
-A curated list of 26 profound life principles and their architectural analysis, built with React, TypeScript, and Tailwind CSS.
+A curated list of **26 profound life principles** and their architectural analysis, designed as an "anti-fragile operating system" for life. Built with React, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **The Database**: A structured archive of 35 life principles covering Core, Strategy, Mindset, Relations, and Systems.
+- **Zenith Kernel**: An AI-powered decision support console (powered by **Gemini 2.5 Flash**) that audits your personal dilemmas against the principles.
+- **Visual Generator**: Generates abstract, philosophical art representing each principle using **Gemini 2.5 Flash Image**, with automatic high-quality fallback visuals.
+- **Share Protocol**: Export high-fidelity, aesthetic 3:4 principle cards for social sharing.
 
 ## Project Structure
 
 - **Core**: React 19 + TypeScript
 - **Styling**: Tailwind CSS
-- **AI Integration**: Google Gemini API (Zenith Kernel)
+- **AI Integration**: Google GenAI SDK (Gemini 2.5 series)
 
 ## Getting Started
 

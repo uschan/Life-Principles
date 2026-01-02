@@ -139,26 +139,35 @@ export async function generatePrincipleImage(principle: PrincipleItem): Promise<
 
   const ai = new GoogleGenAI({ apiKey: apiKey });
 
-  // Modified Prompt: Softer, more philosophical, less aggressive/industrial
+  // Optimized Prompt: Visual Metaphor, Inverted Sketch, Strict No-Text
   const prompt = `
-    Create a highly aesthetic, abstract, minimalist digital art piece representing the concept: "${principle.title}".
+    Role: You are an avant-garde conceptual artist.
+    Task: Create a "Raw Inverted Sketch" that acts as a visual metaphor for the following philosophical principle.
     
-    Style: Ethereal, Cinematic, Geometric Abstraction, Philosophical.
-    Mood: Contemplative, Serene, Profound, Vast.
+    PRINCIPLE TITLE: "${principle.title}"
+    PRINCIPLE MEANING: "${principle.content}"
     
-    Color Palette: 
-    - Deep Obsidian/Void Black background.
-    - Soft, glowing Tungsten (Warm Orange/Amber) highlights.
-    - Subtle Slate Grey structures.
+    VISUAL INSTRUCTIONS:
+    1. METAPHORICAL INTERPRETATION: Do not just draw the title. Translate the *meaning* into a scene of tension, structure, or force.
+       - Example: If the meaning is "Focus", draw a chaotic storm with a single, sharp, unmoving line cutting through it.
+       - Example: If the meaning is "Resilience", draw a small geometric shape holding up a massive weight.
+       - Example: If the meaning is "Exit Rights", draw a broken chain or an open door in a solid wall.
     
-    Visual Elements: 
-    - Smooth gradients, fog, light rays, simple geometric forms (spheres, monoliths, lines).
-    - Avoid messy details, avoid text, avoid wires/grunge.
-    - Focus on light and shadow interplay.
+    2. ART STYLE:
+       - Medium: White charcoal/chalk on rough pitch-black paper (Inverted Sketch).
+       - Technique: Frantic, expressive, rough strokes. Not clean vectors. Not cartoonish.
+       - Atmosphere: Dark, Intellectual, Industrial, Moody.
+       - Composition: Use negative space (blackness) aggressively.
     
-    Aspect Ratio: 1:1.
-    Quality: 8k resolution, architectural photography style.
-    Context: "${principle.content}"
+    3. COLOR ACCENT:
+       - The image must be 95% Black and White.
+       - Add ONE splash of "Signal Orange" (#FF4D00) or "Red" to highlight the focal point of the metaphor.
+    
+    NEGATIVE PROMPTS (FORBIDDEN):
+    - NO TEXT. NO LETTERS. NO NUMBERS. NO WORDS.
+    - NO SIGNATURES. NO WATERMARKS.
+    - No photorealism. No 3D rendering style.
+    - No complex backgrounds.
   `;
 
   // Use gemini-2.5-flash-image for generation as per guidelines for general tasks
